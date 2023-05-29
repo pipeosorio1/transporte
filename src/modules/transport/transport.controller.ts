@@ -31,6 +31,12 @@ export class TransportController {
     private readonly riderRepository: RiderRepository,
   ) {}
 
+  /**
+   * Method for to open a new journey.
+   * @param {TransportStoreDto} body json required to perform the action.
+   * @returns {object} http response.
+   * @throws {HttpException}
+   */
   @Post()
   public async store(@Body() body: TransportStoreDto): Promise<any> {
     const opts = JobConfig;
@@ -72,6 +78,12 @@ export class TransportController {
     return { status: 'CREATED' };
   }
 
+  /**
+   * Method for to finish the trip and make the payment.
+   * @param {TransportModifyDto} body json required to perform the action.
+   * @returns {object} http response.
+   * @throws {HttpException}
+   */
   @Put()
   public async modify(@Body() body: TransportModifyDto): Promise<any> {
     const opts = JobConfig;

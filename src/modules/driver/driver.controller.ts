@@ -20,6 +20,12 @@ export class DriverController {
     private readonly driverService: DriverService,
   ) {}
 
+  /**
+   * Method for opening a new trip.
+   * @param {DriverStoreDto} body json required to perform the action.
+   * @returns {object} http response.
+   * @throws {HttpException}
+   */
   @Post()
   public async store(@Body() body: DriverStoreDto): Promise<any> {
     const errors = await this.driverService.register(body);

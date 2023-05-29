@@ -20,6 +20,12 @@ export class RiderController {
     private readonly riderService: RiderService,
   ) {}
 
+  /**
+   * Method for opening a new driver.
+   * @param {RiderStoreDto} body json required to perform the action.
+   * @returns {object} http response.
+   * @throws {HttpException}
+   */
   @Post()
   public async store(@Body() body: RiderStoreDto): Promise<any> {
     const errors = await this.riderService.register(body);
