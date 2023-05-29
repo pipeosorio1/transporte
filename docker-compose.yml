@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  transporte:
+    container_name: transporte
+    image: transporte
+    build:
+      context: .
+      target: development
+      dockerfile: ./Dockerfile
+    ports:
+      - ${APP_PORT:-3000}:${APP_PORT:-3000}
+    networks:
+      - transporte-dev
+    volumes:
+      - .:/app
+      - transporte:/app/node_modules
+    restart: unless-stopped
+
+  mongo-transporte:
+    image: mongo
+    container_name: mongo-transporte
+    restart: always
+    command: mongod --port ${MONGO_PORT}
+    ports:
+      - ${MONGO_PORT}:${MONGO_PORT}
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+    volumes:
+      - mongodb:/data/db
+    networks:
+      - transporte-dev
+
+  redis-transporte:
+    image: "redis"
+    container_name: redis-transporte
+    restart: unless-stopped
+    command: redis-server --requirepass ${REDIS_PASSWORD} --save 20 1 --loglevel warning
+    environment:
+      - ENABLE_OVERCOMMIT_MEMORY=true 
+    ports:
+      - "${REDIS_EXTERNAL_PORT}:${REDIS_PORT}"
+    volumes:
+      - redis_db_data:/data
+    networks:
+      - transporte-dev
+
+volumes:
+  transporte:
+  mongodb:
+  redis_db_data:
+
+networks:
+  transporte-dev:
+    name: transporte-dev
+    driver: bridge
